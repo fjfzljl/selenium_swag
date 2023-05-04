@@ -14,3 +14,7 @@ class LoginPage:
     
     def get_login_button(self):
         return self.driver.find_element(By.ID, "login-button")
+    
+    def get_error_message(self):
+        error_message = self.driver.find_element(By.XPATH, "//h3[@data-test='error']")
+        return error_message.text
