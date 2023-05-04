@@ -1,8 +1,4 @@
 import sys
-
-sys.path.append(".")
-sys.path.append("lib")
-
 import argparse
 import subprocess
 import os
