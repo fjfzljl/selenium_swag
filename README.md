@@ -42,6 +42,6 @@ The test report should save in pytest_report.html
 - pytest.ini : explain the test cases mark
 
 ## sample test cases explain
-TEST00001 : Verify a valid username and password to log in
-TEST00001 ~ TEST00009 : Verify different reasons for login failure, display expected error messages
+- TEST00001 : Verify a valid username and password to log in
+- TEST00001 ~ TEST00009 : Verify different reasons for login failure, display expected error messages
 
