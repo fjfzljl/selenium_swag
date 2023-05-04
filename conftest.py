@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import sys
 import logging
 import pytest
@@ -61,11 +60,8 @@ def suite_setupteardown():
 
 
 @pytest.fixture
-def eachtest_setupteardown(request):
+def eachtest_setupteardown():
     logging.info("eachtest_setupteardown fixture start...")
-
-    arg_1 = request.param[0]
-    logging.info(f"type : {arg_1}")
 
     logging.info("change system configuration...")
 

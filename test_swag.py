@@ -51,18 +51,16 @@ def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, er
 
 @pytest.mark.TEST00001
 @pytest.mark.parametrize(
-    "dstring, eachtest_setupteardown, usernm, passwd, err_msg, expected_result",
+    "dstring, usernm, passwd, err_msg, expected_result",
     [
         (
             "TEST00001 : Verify login success : a valid username and password",
-            ["debug"],
             "standard_user",
             "secret_sauce",
             "",
             True,
         ),
     ],
-    indirect=["eachtest_setupteardown"],
 )
 def test_login_page_success(
     suite_setupteardown,
@@ -82,18 +80,16 @@ def test_login_page_success(
 
 @pytest.mark.TEST00002
 @pytest.mark.parametrize(
-    "dstring, eachtest_setupteardown, usernm, passwd, err_msg, expected_result",
+    "dstring, usernm, passwd, err_msg, expected_result",
     [
         (
             "TEST00002 : Verify login fail and error message : empty password",
-            ["debug"],
             "standard_user",
             "",
             "Epic sadface: Password is required",
             True,
         ),
     ],
-    indirect=["eachtest_setupteardown"],
 )
 def test_login_page_empty_password(
     suite_setupteardown,
@@ -113,18 +109,16 @@ def test_login_page_empty_password(
 
 @pytest.mark.TEST00003
 @pytest.mark.parametrize(
-    "dstring, eachtest_setupteardown, usernm, passwd, err_msg, expected_result",
+    "dstring, usernm, passwd, err_msg, expected_result",
     [
         (
             "TEST00003 : Verify login fail and error message : empty username",
-            ["debug"],
             "",
             "secret_sauce",
             "Epic sadface: Username is required",
             True,
         ),
     ],
-    indirect=["eachtest_setupteardown"],
 )
 def test_login_page_empty_username(
     suite_setupteardown,
@@ -149,11 +143,10 @@ def test_login_page_empty_username(
 @pytest.mark.TEST00008
 @pytest.mark.TEST00009
 @pytest.mark.parametrize(
-    "dstring, eachtest_setupteardown, usernm, passwd, err_msg, expected_result",
+    "dstring, usernm, passwd, err_msg, expected_result",
     [
         (
             "TEST00004 : Verify login fail and error message : an invalid username",
-            ["debug"],
             "standard_userabc",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
@@ -161,7 +154,6 @@ def test_login_page_empty_username(
         ),
         (
             "TEST00005 : Verify login fail and error message : an invalid password",
-            ["debug"],
             "standard_user",
             "0secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
@@ -169,7 +161,6 @@ def test_login_page_empty_username(
         ),
         (
             "TEST00006 : Verify login fail and error message : username ending space",
-            ["debug"],
             "standard_user ",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
@@ -177,7 +168,6 @@ def test_login_page_empty_username(
         ),
         (
             "TEST00007 : Verify login fail and error message : username leading space",
-            ["debug"],
             " standard_user",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
@@ -185,7 +175,6 @@ def test_login_page_empty_username(
         ),
         (
             "TEST00008 : Verify login fail and error message : password ending space",
-            ["debug"],
             "standard_user",
             "secret_sauce  ",
             "Epic sadface: Username and password do not match any user in this service",
@@ -193,14 +182,12 @@ def test_login_page_empty_username(
         ),
         (
             "TEST00009 : Verify login fail and error message : password leading space",
-            ["debug"],
             "standard_user",
             "  secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
             True,
         ),
     ],
-    indirect=["eachtest_setupteardown"],
 )
 def test_login_page_unmatch(
     suite_setupteardown,
