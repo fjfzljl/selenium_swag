@@ -13,39 +13,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from libs.login_page import *
 
 
-logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger("unit test")
-
-
-@pytest.mark.TEST00001
-@pytest.mark.parametrize(
-    "dstring, eachtest_setupteardown, usernm, passwd, check_string, expected_result",
-    [
-        ("TEST00001 : test get_usernm() return correct usernm", ["debug"], "standard_user", "secret_sauce", "bob", True),
-    ],
-    indirect=["eachtest_setupteardown"],
-)
-def test_login_page(
-    suite_setupteardown,
+def verify_login(suite_setupteardown,
     eachtest_setupteardown,
-    dstring,
     usernm,
-    passwd,
-    check_string,
-    expected_result,
-):
-    test_login_page.__doc__ = dstring
+    passwd):
+    
     driver = suite_setupteardown
     
     logging.info(f"processing arg usernm : {usernm}")
     logging.info(f"processing arg passwd : {passwd}")
-    # logging.info(f"processing arg check_string : {check_string}")
-    # sd = student.Student(usernm, passwd)
-    # assert (check_string == sd.get_usernm()) == expected_result
 
-    # driver.get("https://www.saucedemo.com/")
-    # username = driver.find_element(By.ID, "user-name")
-    # username.send_keys("standard_user")
     loginpage = LoginPage(driver)
     
     username = loginpage.get_username()
@@ -59,7 +37,6 @@ def test_login_page(
     login_button.click()
 
 
-    print(driver.current_url)
 
     try:
         element = WebDriverWait(driver, 10).until(
@@ -67,14 +44,36 @@ def test_login_page(
         )
         
         # time.sleep(10)
-        assert "inventory" in driver.current_url
+        logging.info(f'{driver.current_url}')
+
+
     except Exception as e: #
         logging.error(f"Exception : {e}")
+        return False
+    
+    return "inventory" in driver.current_url
 
-    # finally:
-    #     # print('finally')
-    #     driver.quit()
 
-
-    # assert True
-
+@pytest.mark.TEST00001
+@pytest.mark.TEST00002
+@pytest.mark.parametrize(
+    "dstring, eachtest_setupteardown, usernm, passwd, expected_result",
+    [
+        ("TEST00001 : Verify that you can enter a valid username and password to log in to the website", ["debug"], "standard_user", "secret_sauce", True),
+        ("TEST00002 : Verify that you cannot log in with an invalid username and password combination.", ["debug"], "standard_userabc", "secret_sauce", False),
+    ],
+    indirect=["eachtest_setupteardown"],
+)
+def test_login_page(
+    suite_setupteardown,
+    eachtest_setupteardown,
+    dstring,
+    usernm,
+    passwd,
+    expected_result,
+):
+    test_login_page.__doc__ = dstring
+    # driver = suite_setupteardown
+    actual_result = verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd)
+    assert actual_result == expected_result
+    
