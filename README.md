@@ -1,5 +1,5 @@
 # selenium_swag
-use selenium test https://www.saucedemo.com/
+Use selenium test https://www.saucedemo.com/ login page
 
 ## This test can run in macOS. Install requirement
 ```shell
