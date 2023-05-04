@@ -3,12 +3,20 @@
 import pytest
 import logging
 
+from collections import namedtuple
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from libs.login_page import *
 
+
+Login_Status_Code = namedtuple('Login_Status_Code', ['code', 'description'])
+
+LOGIN_UNACCEPT_ERROR = Login_Status_Code(0, 'login unaccept error')
+LOGIN_SUCCESS = Login_Status_Code(1, 'login fail')
+LOGIN_FAIL_MEG_MATCH = Login_Status_Code(2, 'login fail, display correct message')
 
 def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, err_msg):
     driver = suite_setupteardown
@@ -32,21 +40,25 @@ def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, er
             EC.presence_of_element_located((By.CLASS_NAME, "shopping_cart_link"))
         )
 
-        logging.info(f"{driver.current_url}")
+        logging.info(f"current_url : {driver.current_url}")
+        
+        if "inventory" in driver.current_url:
+            return LOGIN_SUCCESS
 
     except Exception as e:  #
         # logging.error(f"Exception : {e}")
-        logging.info(f"{driver.current_url}")
+        logging.info(f"current_url : {driver.current_url}")
         error_message = loginpage.get_error_message()
         logging.info(f"error_message : {error_message}")
 
         if error_message == err_msg:
-            return True
-        logging.error(f"error message not match")
-        return False
+            return LOGIN_FAIL_MEG_MATCH
 
-    logging.info(f"{driver.current_url}")
-    return "inventory" in driver.current_url
+        logging.error(f"error message not match")
+        return LOGIN_UNACCEPT_ERROR
+
+    logging.info(f"current_url : {driver.current_url}")
+    return LOGIN_UNACCEPT_ERROR
 
 
 @pytest.mark.TEST00001
@@ -58,7 +70,7 @@ def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, er
             "standard_user",
             "secret_sauce",
             "",
-            True,
+            LOGIN_SUCCESS,
         ),
     ],
 )
@@ -87,7 +99,7 @@ def test_login_page_success(
             "standard_user",
             "",
             "Epic sadface: Password is required",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
     ],
 )
@@ -116,7 +128,7 @@ def test_login_page_empty_password(
             "",
             "secret_sauce",
             "Epic sadface: Username is required",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
     ],
 )
@@ -150,42 +162,42 @@ def test_login_page_empty_username(
             "standard_userabc",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
         (
             "TEST00005 : Verify login fail and error message : an invalid password",
             "standard_user",
             "0secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
         (
             "TEST00006 : Verify login fail and error message : username ending space",
             "standard_user ",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
         (
             "TEST00007 : Verify login fail and error message : username leading space",
             " standard_user",
             "secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
         (
             "TEST00008 : Verify login fail and error message : password ending space",
             "standard_user",
             "secret_sauce  ",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
         (
             "TEST00009 : Verify login fail and error message : password leading space",
             "standard_user",
             "  secret_sauce",
             "Epic sadface: Username and password do not match any user in this service",
-            True,
+            LOGIN_FAIL_MEG_MATCH,
         ),
     ],
 )
