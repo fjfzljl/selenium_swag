@@ -13,12 +13,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def pytest_configure(config):
-    config._metadata['test software version'] = '0.1'
+    config._metadata["test software version"] = "0.1"
+
 
 @pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_header(cells):
-    cells.insert(1, html.th('Description'))
+    cells.insert(1, html.th("Description"))
     cells.pop()
+
 
 @pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_row(report, cells):
@@ -29,14 +31,18 @@ def pytest_html_results_table_row(report, cells):
         logging.error(error)
         logging.info("AttributeError trying to pytest_html_results_table_row - end")
     except Exception as e:
-        logging.error(f"Unknown Exception trying to pytest_html_results_table_row : {e}")
+        logging.error(
+            f"Unknown Exception trying to pytest_html_results_table_row : {e}"
+        )
     cells.pop()
+
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     report.description = str(item.function.__doc__)
+
 
 @pytest.fixture(scope="module")
 def suite_setupteardown():
@@ -57,7 +63,6 @@ def suite_setupteardown():
 @pytest.fixture
 def eachtest_setupteardown(request):
     logging.info("eachtest_setupteardown fixture start...")
-
 
     arg_1 = request.param[0]
     logging.info(f"type : {arg_1}")
