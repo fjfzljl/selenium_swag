@@ -12,11 +12,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from libs.login_page import *
 
 
-Login_Status_Code = namedtuple('Login_Status_Code', ['code', 'description'])
+Login_Status_Code = namedtuple("Login_Status_Code", ["code", "description"])
 
-LOGIN_UNACCEPT_ERROR = Login_Status_Code(0, 'login unaccept error')
-LOGIN_SUCCESS = Login_Status_Code(1, 'login fail')
-LOGIN_FAIL_MEG_MATCH = Login_Status_Code(2, 'login fail, display correct message')
+LOGIN_UNACCEPT_ERROR = Login_Status_Code(0, "login unaccept error")
+LOGIN_SUCCESS = Login_Status_Code(1, "login fail")
+LOGIN_FAIL_MEG_MATCH = Login_Status_Code(2, "login fail, display correct message")
+
 
 def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, err_msg):
     driver = suite_setupteardown
@@ -41,7 +42,7 @@ def verify_login(suite_setupteardown, eachtest_setupteardown, usernm, passwd, er
         )
 
         logging.info(f"current_url : {driver.current_url}")
-        
+
         if "inventory" in driver.current_url:
             return LOGIN_SUCCESS
 
